@@ -1,23 +1,25 @@
-use axum::Router;
 use sqlx::sqlite::{SqliteConnectOptions, SqlitePoolOptions};
+use sqlx::SqlitePool;
 use std::str::FromStr;
-use gestor_rust::infrastructure::server::create_router;
 
-/// Cria um pool SQLite em memória para testes e executa as migrações.
-/// Usa max_connections=1 para garantir que todas as operações compartilhem
-/// o mesmo banco em memória.
-pub async fn create_test_app() -> Router {
-    let options = SqliteConnectOptions::from_str("sqlite::memory:")
-        .unwrap()
+/// Cria o pool de conexão com o banco SQLite e executa as migrações.
+pub async fn init_pool(database_url: &str) -> Result<SqlitePool, sqlx::Error> {
+    let options = SqliteConnectOptions::from_str(database_url)?
         .create_if_missing(true)
         .foreign_keys(true);
 
     let pool = SqlitePoolOptions::new()
-        .max_connections(1)
+        .max_connections(5)
         .connect_with(options)
-        .await
-        .unwrap();
+        .await?;
 
+    run_migrations(&pool).await?;
+
+    Ok(pool)
+}
+
+/// Executa os scripts SQL de migração na ordem correta.
+async fn run_migrations(pool: &SqlitePool) -> Result<(), sqlx::Error> {
     let migrations = [
         include_str!("../../migrations/001_create_categories.sql"),
         include_str!("../../migrations/002_create_products.sql"),
@@ -34,10 +36,11 @@ pub async fn create_test_app() -> Router {
         for statement in migration.split(';') {
             let trimmed = statement.trim();
             if !trimmed.is_empty() {
-                sqlx::query(trimmed).execute(&pool).await.unwrap();
+                sqlx::query(trimmed).execute(pool).await?;
             }
         }
     }
 
-    create_router(pool)
+    tracing::info!("Migrações executadas com sucesso");
+    Ok(())
 }

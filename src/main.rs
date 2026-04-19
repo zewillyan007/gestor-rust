@@ -1,6 +1,6 @@
-use gestor_rust::config;
-use gestor_rust::db;
-use gestor_rust::routes;
+use gestor_rust::infrastructure::config;
+use gestor_rust::infrastructure::db;
+use gestor_rust::infrastructure::server;
 
 use axum::http::Method;
 use tower_http::cors::{Any, CorsLayer};
@@ -41,8 +41,8 @@ async fn main() {
         .allow_headers(Any)
         .allow_origin(Any);
 
-    // Cria o router com todas as rotas
-    let app = routes::create_router(pool)
+    // Cria o router com injeção de dependências
+    let app = server::create_router(pool)
         .layer(cors)
         .layer(TraceLayer::new_for_http());
 
