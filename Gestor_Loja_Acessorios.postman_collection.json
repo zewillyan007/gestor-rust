@@ -1,0 +1,801 @@
+{
+	"info": {
+		"_postman_id": "gestor-loja-acessorios-api",
+		"name": "Gestor Loja de Acess\u00f3rios - API",
+		"description": "API de gerenciamento de loja de acess\u00f3rios femininos e infantis.\n\nFuncionalidades: cadastro de produtos, controle de estoque, categoriza\u00e7\u00e3o, controle de disponibilidade, garantias, devolu\u00e7\u00f5es, vendas e relat\u00f3rios.\n\nServidor: http://localhost:10020\nSwagger UI: http://localhost:10020/swagger-ui",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Produtos",
+			"item": [
+				{
+					"name": "Listar Produtos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products"]
+						},
+						"description": "Retorna a lista de todos os produtos cadastrados."
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Produto por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/{{product_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products", "{{product_id}}"]
+						},
+						"description": "Retorna os dados de um produto espec\u00edfico pelo ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Produto",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Colar de P\u00e9rolas\",\n\t\"description\": \"Colar de p\u00e9rolas naturais com fecho dourado\",\n\t\"sku\": \"COL-PER-001\",\n\t\"brand\": \"Elegance\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products"]
+						},
+						"description": "Cria um novo produto. O campo `sku` deve ser \u00fanico."
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Produto",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Colar de P\u00e9rolas Premium\",\n\t\"description\": \"Colar de p\u00e9rolas naturais com fecho em ouro 18k\",\n\t\"brand\": \"Elegance Premium\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products/{{product_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products", "{{product_id}}"]
+						},
+						"description": "Atualiza os dados de um produto existente. Todos os campos s\u00e3o opcionais."
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Status do Produto",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"status\": \"unavailable\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products/{{product_id}}/status",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products", "{{product_id}}", "status"]
+						},
+						"description": "Altera o status de disponibilidade do produto. Valores aceitos: `available`, `unavailable`, `discontinued`."
+					},
+					"response": []
+				},
+				{
+					"name": "Remover Produto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/{{product_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products", "{{product_id}}"]
+						},
+						"description": "Remove um produto pelo ID."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categorias",
+			"item": [
+				{
+					"name": "Listar Categorias",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/categories",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories"]
+						},
+						"description": "Retorna todas as categorias cadastradas."
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Categoria por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/categories/{{category_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories", "{{category_id}}"]
+						},
+						"description": "Retorna os dados de uma categoria espec\u00edfica pelo ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Categoria",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Colares\",\n\t\"description\": \"Diversos tipos de colares\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/categories",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories"]
+						},
+						"description": "Cria uma nova categoria. Use `parent_id` para criar subcategorias."
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Subcategoria",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Colares de P\u00e9rolas\",\n\t\"description\": \"Colares feitos com p\u00e9rolas naturais\",\n\t\"parent_id\": \"{{category_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/categories",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories"]
+						},
+						"description": "Cria uma subcategoria vinculada a uma categoria pai via `parent_id`."
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Categoria",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Colares e Pingentes\",\n\t\"description\": \"Colares, gargantilhas e pingentes\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/categories/{{category_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories", "{{category_id}}"]
+						},
+						"description": "Atualiza os dados de uma categoria. Todos os campos s\u00e3o opcionais."
+					},
+					"response": []
+				},
+				{
+					"name": "Remover Categoria",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/categories/{{category_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories", "{{category_id}}"]
+						},
+						"description": "Remove uma categoria pelo ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Associar Produto \u00e0 Categoria",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/{{product_id}}/categories/{{category_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products", "{{product_id}}", "categories", "{{category_id}}"]
+						},
+						"description": "Associa um produto a uma categoria. Valida se ambos existem antes de associar."
+					},
+					"response": []
+				},
+				{
+					"name": "Desassociar Produto de Categoria",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/{{product_id}}/categories/{{category_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products", "{{product_id}}", "categories", "{{category_id}}"]
+						},
+						"description": "Remove a associa\u00e7\u00e3o entre um produto e uma categoria."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pre\u00e7os",
+			"item": [
+				{
+					"name": "Listar Pre\u00e7os do Produto",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/{{product_id}}/prices",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products", "{{product_id}}", "prices"]
+						},
+						"description": "Retorna o hist\u00f3rico de pre\u00e7os de um produto."
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Pre\u00e7o",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"cost_price\": 25.0,\n\t\"sale_price\": 59.90,\n\t\"effective_date\": \"2026-04-18\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products/{{product_id}}/prices",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products", "{{product_id}}", "prices"]
+						},
+						"description": "Define um novo pre\u00e7o para o produto. Permite manter hist\u00f3rico de pre\u00e7os."
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Pre\u00e7o",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"cost_price\": 30.0,\n\t\"sale_price\": 69.90,\n\t\"effective_date\": \"2026-05-01\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/prices/{{price_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "prices", "{{price_id}}"]
+						},
+						"description": "Atualiza um pre\u00e7o existente. Todos os campos s\u00e3o opcionais."
+					},
+					"response": []
+				},
+				{
+					"name": "Remover Pre\u00e7o",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/prices/{{price_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "prices", "{{price_id}}"]
+						},
+						"description": "Remove um registro de pre\u00e7o pelo ID."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Estoque",
+			"item": [
+				{
+					"name": "Consultar Estoque do Produto",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/{{product_id}}/stock",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products", "{{product_id}}", "stock"]
+						},
+						"description": "Retorna o estoque atual de um produto espec\u00edfico."
+					},
+					"response": []
+				},
+				{
+					"name": "Inicializar Estoque",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"product_id\": \"{{product_id}}\",\n\t\"quantity\": 50,\n\t\"min_quantity\": 5,\n\t\"location\": \"Prateleira A3\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/stocks",
+							"host": ["{{base_url}}"],
+							"path": ["api", "stocks"]
+						},
+						"description": "Inicializa o registro de estoque para um produto. Valida se o produto existe."
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar Entrada de Estoque",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"product_id\": \"{{product_id}}\",\n\t\"movement_type\": \"in\",\n\t\"quantity\": 20,\n\t\"reason\": \"Reposicao de estoque\",\n\t\"reference\": \"NF-2026-001\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/stock/movements",
+							"host": ["{{base_url}}"],
+							"path": ["api", "stock", "movements"]
+						},
+						"description": "Registra uma entrada (`in`) ou sa\u00edda (`out`) de estoque. Se n\u00e3o houver registro de estoque, um \u00e9 criado automaticamente. Atualiza a quantidade automaticamente."
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar Sa\u00edda de Estoque",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"product_id\": \"{{product_id}}\",\n\t\"movement_type\": \"out\",\n\t\"quantity\": 3,\n\t\"reason\": \"Venda realizada\",\n\t\"reference\": \"VENDA-001\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/stock/movements",
+							"host": ["{{base_url}}"],
+							"path": ["api", "stock", "movements"]
+						},
+						"description": "Registra uma sa\u00edda de estoque. Retorna erro 400 se n\u00e3o houver estoque suficiente."
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Movimenta\u00e7\u00f5es de Estoque",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/stock/movements",
+							"host": ["{{base_url}}"],
+							"path": ["api", "stock", "movements"]
+						},
+						"description": "Retorna todas as movimenta\u00e7\u00f5es de estoque ordenadas por data (mais recentes primeiro)."
+					},
+					"response": []
+				},
+				{
+					"name": "Produtos com Estoque Baixo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/stock/low",
+							"host": ["{{base_url}}"],
+							"path": ["api", "stock", "low"]
+						},
+						"description": "Lista produtos com quantidade em estoque menor ou igual \u00e0 quantidade m\u00ednima definida."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Garantias",
+			"item": [
+				{
+					"name": "Listar Garantias",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/warranties",
+							"host": ["{{base_url}}"],
+							"path": ["api", "warranties"]
+						},
+						"description": "Retorna todas as garantias cadastradas."
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Garantia por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/warranties/{{warranty_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "warranties", "{{warranty_id}}"]
+						},
+						"description": "Retorna os dados de uma garantia espec\u00edfica pelo ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar Garantia",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"product_id\": \"{{product_id}}\",\n\t\"customer_name\": \"Maria Silva\",\n\t\"customer_contact\": \"maria@email.com\",\n\t\"purchase_date\": \"2026-04-18\",\n\t\"warranty_days\": 90,\n\t\"notes\": \"Garantia estendida por compra com cart\u00e3o da loja\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/warranties",
+							"host": ["{{base_url}}"],
+							"path": ["api", "warranties"]
+						},
+						"description": "Registra uma nova garantia para um produto vendido. `warranty_days` deve ser maior que zero. A data de expira\u00e7\u00e3o \u00e9 calculada automaticamente."
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Status da Garantia",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"status\": \"claimed\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/warranties/{{warranty_id}}/status",
+							"host": ["{{base_url}}"],
+							"path": ["api", "warranties", "{{warranty_id}}", "status"]
+						},
+						"description": "Altera o status de uma garantia. Valores aceitos: `active`, `expired`, `claimed`."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Devolu\u00e7\u00f5es",
+			"item": [
+				{
+					"name": "Listar Devolu\u00e7\u00f5es",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/returns",
+							"host": ["{{base_url}}"],
+							"path": ["api", "returns"]
+						},
+						"description": "Retorna todas as devolu\u00e7\u00f5es cadastradas."
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Devolu\u00e7\u00e3o por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/returns/{{return_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "returns", "{{return_id}}"]
+						},
+						"description": "Retorna os dados de uma devolu\u00e7\u00e3o espec\u00edfica pelo ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Abrir Devolu\u00e7\u00e3o",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"product_id\": \"{{product_id}}\",\n\t\"warranty_id\": \"{{warranty_id}}\",\n\t\"reason\": \"Produto com defeito de fabrica\u00e7\u00e3o\",\n\t\"refund_amount\": 59.90\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/returns",
+							"host": ["{{base_url}}"],
+							"path": ["api", "returns"]
+						},
+						"description": "Abre uma nova solicita\u00e7\u00e3o de devolu\u00e7\u00e3o. `warranty_id` e `refund_amount` s\u00e3o opcionais."
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Status da Devolu\u00e7\u00e3o",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"status\": \"approved\",\n\t\"refund_amount\": 59.90\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/returns/{{return_id}}/status",
+							"host": ["{{base_url}}"],
+							"path": ["api", "returns", "{{return_id}}", "status"]
+						},
+						"description": "Altera o status de uma devolu\u00e7\u00e3o. Valores aceitos: `requested`, `approved`, `rejected`, `completed`. `refund_amount` pode ser informado na aprova\u00e7\u00e3o."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vendas",
+			"item": [
+				{
+					"name": "Registrar Venda",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"product_id\": \"{{product_id}}\",\n\t\"quantity\": 2,\n\t\"unit_price\": 59.90,\n\t\"customer_name\": \"Ana Souza\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/sales",
+							"host": ["{{base_url}}"],
+							"path": ["api", "sales"]
+						},
+						"description": "Registra uma nova venda. `quantity` e `unit_price` devem ser maiores que zero. O pre\u00e7o total \u00e9 calculado automaticamente. O estoque \u00e9 atualizado automaticamente via movimenta\u00e7\u00e3o de sa\u00edda. Valida se o produto existe e est\u00e1 dispon\u00edvel (status = available) e se h\u00e1 estoque suficiente."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Relat\u00f3rios",
+			"item": [
+				{
+					"name": "Relat\u00f3rio de Vendas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/reports/sales?start_date=2026-01-01&end_date=2026-12-31",
+							"host": ["{{base_url}}"],
+							"path": ["api", "reports", "sales"],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2026-01-01",
+									"description": "Data inicial (YYYY-MM-DD). Opcional."
+								},
+								{
+									"key": "end_date",
+									"value": "2026-12-31",
+									"description": "Data final (YYYY-MM-DD). Opcional. Se informado, start_date tamb\u00e9m deve ser informado."
+								}
+							]
+						},
+						"description": "Retorna o relat\u00f3rio de vendas com total por produto. Aceita filtros opcionais de per\u00edodo via query params `start_date` e `end_date`."
+					},
+					"response": []
+				},
+				{
+					"name": "Relat\u00f3rio de Vendas (sem filtro)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/reports/sales",
+							"host": ["{{base_url}}"],
+							"path": ["api", "reports", "sales"]
+						},
+						"description": "Retorna o relat\u00f3rio de vendas completo (sem filtro de per\u00edodo)."
+					},
+					"response": []
+				},
+				{
+					"name": "Relat\u00f3rio de Estoque",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/reports/stock",
+							"host": ["{{base_url}}"],
+							"path": ["api", "reports", "stock"]
+						},
+						"description": "Retorna o relat\u00f3rio de estoque atual de todos os produtos, incluindo produtos sem registro de estoque (quantidade = 0)."
+					},
+					"response": []
+				},
+				{
+					"name": "Relat\u00f3rio de Devolu\u00e7\u00f5es",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/reports/returns?start_date=2026-01-01&end_date=2026-12-31",
+							"host": ["{{base_url}}"],
+							"path": ["api", "reports", "returns"],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2026-01-01",
+									"description": "Data inicial (YYYY-MM-DD). Opcional."
+								},
+								{
+									"key": "end_date",
+									"value": "2026-12-31",
+									"description": "Data final (YYYY-MM-DD). Opcional. Se informado, start_date tamb\u00e9m deve ser informado."
+								}
+							]
+						},
+						"description": "Retorna o relat\u00f3rio de devolu\u00e7\u00f5es. Aceita filtros opcionais de per\u00edodo via query params `start_date` e `end_date`."
+					},
+					"response": []
+				},
+				{
+					"name": "Relat\u00f3rio de Devolu\u00e7\u00f5es (sem filtro)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/reports/returns",
+							"host": ["{{base_url}}"],
+							"path": ["api", "reports", "returns"]
+						},
+						"description": "Retorna o relat\u00f3rio de devolu\u00e7\u00f5es completo (sem filtro de per\u00edodo)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Verificar Status da API",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products"]
+						},
+						"description": "Endpoint simples para verificar se a API est\u00e1 respondendo. Qualquer endpoint GET pode ser usado para isso."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:10020",
+			"type": "string"
+		},
+		{
+			"key": "product_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "category_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "price_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "warranty_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "return_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
