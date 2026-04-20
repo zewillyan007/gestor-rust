@@ -7,6 +7,7 @@ pub mod return_repository;
 pub mod sale_repository;
 pub mod report_repository;
 pub mod unit_of_work;
+#[cfg(test)] pub mod mocks;
 
 use async_trait::async_trait;
 use crate::domain::error::DomainError;
